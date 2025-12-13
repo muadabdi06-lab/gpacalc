@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Grade Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1d1d1f;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group:last-of-type {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #86868b;
+            margin-bottom: 8px;
+            letter-spacing: 0.2px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+            border: 1px solid #e5e5e7;
+            border-radius: 12px;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #007aff;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #007aff;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #0051d5;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .result-display {
+            background: linear-gradient(135deg, #007aff 0%, #0051d5 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 30px;
+            display: none;
+        }
+
+        .result-display.show {
+            display: block;
+        }
+
+        .result-label {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-value {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1;
+        }
+
+        .result-message {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .info-card {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 14px;
+            color: #1d1d1f;
+        }
+
+        .info-label {
+            color: #86868b;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #86868b;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: slideIn 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 16px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            .card {
+                padding: 24px;
+            }
+
+            .result-value {
+                font-size: 56px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Final Grade Calculator</h1>
+            <p class="subtitle">Calculate what you need on your final exam</p>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label>Current Grade (%)</label>
+                <input type="number" id="currentGrade" placeholder="e.g., 85" step="0.01" min="0" max="100">
+                <p class="help-text">Your grade before the final exam</p>
+            </div>
+
+            <div class="input-group">
+                <label>Desired Grade (%)</label>
+                <input type="number" id="desiredGrade" placeholder="e.g., 90" step="0.01" min="0" max="100">
+                <p class="help-text">The final grade you want to achieve</p>
+            </div>
+
+            <div class="input-group">
+                <label>Final Exam Weight (%)</label>
+                <input type="number" id="finalWeight" placeholder="e.g., 30" step="0.01" min="0" max="100">
+                <p class="help-text">How much the final exam counts toward your grade</p>
+            </div>
+
+            <button class="btn btn-primary" onclick="calculateFinal()">Calculate Required Grade</button>
+        </div>
+
+        <div class="card result-display" id="resultCard">
+            <div class="result-label">You Need</div>
+            <div class="result-value" id="resultValue">95%</div>
+            <div class="result-message" id="resultMessage">on your final exam to achieve your desired grade</div>
+        </div>
+
+        <div class="card" id="breakdownCard" style="display: none;">
+            <div class="info-card">
+                <div class="info-title">Grade Breakdown</div>
+                <div class="info-item">
+                    <span class="info-label">Current Grade</span>
+                    <span class="info-value" id="displayCurrent">85%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Current Weight</span>
+                    <span class="info-value" id="displayCurrentWeight">70%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Final Weight</span>
+                    <span class="info-value" id="displayFinalWeight">30%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Desired Final Grade</span>
+                    <span class="info-value" id="displayDesired">90%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Created by Muad Abdi
+        </div>
+    </div>
+
+    <script>
+        function calculateFinal() {
+            const currentGrade = parseFloat(document.getElementById('currentGrade').value);
+            const desiredGrade = parseFloat(document.getElementById('desiredGrade').value);
+            const finalWeight = parseFloat(document.getElementById('finalWeight').value);
+
+            // Validation
+            if (isNaN(currentGrade) || isNaN(desiredGrade) || isNaN(finalWeight)) {
+                alert('Please fill in all fields with valid numbers');
+                return;
+            }
+
+            if (currentGrade < 0 || currentGrade > 100 || 
+                desiredGrade < 0 || desiredGrade > 100 || 
+                finalWeight < 0 || finalWeight > 100) {
+                alert('Please enter values between 0 and 100');
+                return;
+            }
+
+            // Calculate required grade
+            const currentWeight = 100 - finalWeight;
+            const requiredGrade = (desiredGrade - (currentGrade * currentWeight / 100)) / (finalWeight / 100);
+
+            // Update display
+            const resultCard = document.getElementById('resultCard');
+            const resultValue = document.getElementById('resultValue');
+            const resultMessage = document.getElementById('resultMessage');
+            const breakdownCard = document.getElementById('breakdownCard');
+
+            resultCard.classList.add('show');
+            breakdownCard.style.display = 'block';
+
+            // Update result value
+            if (requiredGrade > 100) {
+                resultValue.textContent = 'Impossible';
+                resultValue.style.fontSize = '48px';
+                resultMessage.textContent = `You need ${requiredGrade.toFixed(1)}% on your final, which is not achievable. Consider adjusting your target grade.`;
+                resultCard.style.background = 'linear-gradient(135deg, #ff3b30 0%, #d70015 100%)';
+            } else if (requiredGrade < 0) {
+                resultValue.textContent = `${currentGrade.toFixed(1)}%`;
+                resultValue.style.fontSize = '64px';
+                resultMessage.textContent = `You've already achieved your desired grade! You can score 0% on the final and still reach ${desiredGrade}%.`;
+                resultCard.style.background = 'linear-gradient(135deg, #34c759 0%, #248a3d 100%)';
+            } else {
+                resultValue.textContent = `${requiredGrade.toFixed(1)}%`;
+                resultValue.style.fontSize = '64px';
+                
+                if (requiredGrade > 95) {
+                    resultMessage.textContent = 'This is a very challenging target. Study hard!';
+                    resultCard.style.background = 'linear-gradient(135deg, #ff9500 0%, #c76a00 100%)';
+                } else if (requiredGrade > 85) {
+                    resultMessage.textContent = 'You\'ll need to perform well on the final exam.';
+                    resultCard.style.background = 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)';
+                } else {
+                    resultMessage.textContent = 'This is achievable with good preparation!';
+                    resultCard.style.background = 'linear-gradient(135deg, #34c759 0%, #248a3d 100%)';
+                }
+            }
+
+            // Update breakdown
+            document.getElementById('displayCurrent').textContent = `${currentGrade.toFixed(1)}%`;
+            document.getElementById('displayCurrentWeight').textContent = `${currentWeight.toFixed(1)}%`;
+            document.getElementById('displayFinalWeight').textContent = `${finalWeight.toFixed(1)}%`;
+            document.getElementById('displayDesired').textContent = `${desiredGrade.toFixed(1)}%`;
+
+            // Scroll to result
+            resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Allow Enter key to calculate
+        document.getElementById('currentGrade').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateFinal();
+        });
+
+        document.getElementById('desiredGrade').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateFinal();
+        });
+
+        document.getElementById('finalWeight').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') calculateFinal();
+        });
+    </script>
+</body>
+</html>
