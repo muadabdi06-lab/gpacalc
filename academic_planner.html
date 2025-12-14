@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DS & Econ Course Planner - Muad</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            color: #1d1d1f;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #86868b;
+            font-weight: 400;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #007aff;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .progress-container {
+            margin-bottom: 24px;
+        }
+
+        .progress-label {
+            font-size: 14px;
+            color: #86868b;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #e5e5e7;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #34c759 0%, #30d158 100%);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 8px;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .category-section {
+            margin-bottom: 24px;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: #f5f5f7;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-header:hover {
+            background: #ebebed;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .category-count {
+            font-size: 13px;
+            color: #86868b;
+        }
+
+        .course-list {
+            margin-left: 12px;
+        }
+
+        .course-item {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .course-item:hover {
+            background: #ebebed;
+            transform: translateX(4px);
+        }
+
+        .course-item.completed {
+            background: #d4f4dd;
+            border-left: 4px solid #34c759;
+        }
+
+        .course-item.in-progress {
+            background: #fff5cc;
+            border-left: 4px solid #ff9500;
+        }
+
+        .course-info {
+            flex: 1;
+        }
+
+        .course-code {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 4px;
+        }
+
+        .course-name {
+            font-size: 13px;
+            color: #86868b;
+            line-height: 1.4;
+        }
+
+        .course-credits {
+            font-size: 14px;
+            font-weight: 600;
+            color: #007aff;
+            margin: 0 16px;
+        }
+
+        .status-buttons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .status-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .status-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .status-btn.completed {
+            background: #34c759;
+            color: white;
+        }
+
+        .status-btn.in-progress {
+            background: #ff9500;
+            color: white;
+        }
+
+        .status-btn.not-taken {
+            background: #e5e5e7;
+            color: #86868b;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: #007aff;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #0051d5;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(0, 122, 255, 0.4);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #86868b;
+            font-weight: 500;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: #f5f5f7;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #86868b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-tab.active {
+            background: #007aff;
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Course Planner</h1>
+            <p class="subtitle">Data Science & Economics, BS - Track your progress</p>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="card">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCredits">0</div>
+                    <div class="stat-label">Total Credits</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedCount">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="inProgressCount">0</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="remainingCount">0</div>
+                    <div class="stat-label">Remaining</div>
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-label">Overall Progress</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%">
+                        <span id="progressText">0%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterCourses('all')">All Courses</button>
+                <button class="filter-tab" onclick="filterCourses('completed')">Completed</button>
+                <button class="filter-tab" onclick="filterCourses('in-progress')">In Progress</button>
+                <button class="filter-tab" onclick="filterCourses('not-taken')">Not Taken</button>
+            </div>
+        </div>
+
+        <!-- Courses -->
+        <div class="card" id="coursesCard">
+            <div class="section-title">Your Courses</div>
+            <div id="coursesContainer"></div>
+        </div>
+
+        <div class="footer">
+            Created by Muad
+        </div>
+    </div>
+
+    <script>
+        const courseData = {
+            "Computer Science Overview": [
+                { code: "CS 1200", name: "First Year Seminar", credits: 1 },
+                { code: "CS 1210", name: "Professional Development for Khoury Co-op", credits: 1 }
+            ],
+            "Computer Science Required": [
+                { code: "CS 1800", name: "Discrete Structures", credits: 4 },
+                { code: "CS 1802", name: "Seminar for CS 1800", credits: 1 },
+                { code: "CS 2000", name: "Introduction to Program Design and Implementation", credits: 4 },
+                { code: "CS 2001", name: "Lab for CS 2000", credits: 1 },
+                { code: "CS 3200", name: "Introduction to Databases", credits: 4 }
+            ],
+            "Programming Sequence (Choose One Path)": [
+                { code: "CS 2100", name: "Program Design and Implementation 1", credits: 4 },
+                { code: "CS 2101", name: "Lab for CS 2100", credits: 1 },
+                { code: "CS 3100", name: "Program Design and Implementation 2", credits: 4 },
+                { code: "CS 3101", name: "Lab for CS 3100", credits: 1 },
+                { code: "DS 2500", name: "Intermediate Programming with Data", credits: 4 },
+                { code: "DS 2501", name: "Lab for DS 2500", credits: 1 },
+                { code: "DS 3500", name: "Advanced Programming with Data", credits: 4 }
+            ],
+            "Data Science Foundations": [
+                { code: "DS 3000", name: "Foundations of Data Science", credits: 4 },
+                { code: "DS 4200", name: "Information Presentation and Visualization", credits: 4 },
+                { code: "DS 4300", name: "Large-Scale Information Storage and Retrieval", credits: 4 },
+                { code: "DS 4400", name: "Machine Learning and Data Mining 1", credits: 4 }
+            ],
+            "Khoury Electives": [
+                { code: "Elective 1", name: "CS/CY/DS 2500+ (4 credits)", credits: 4 }
+            ],
+            "Economics Required": [
+                { code: "ECON 1115", name: "Principles of Macroeconomics", credits: 4 },
+                { code: "ECON 1116", name: "Principles of Microeconomics", credits: 4 },
+                { code: "ECON 2315", name: "Macroeconomic Theory", credits: 4 },
+                { code: "ECON 2316", name: "Microeconomic Theory", credits: 4 },
+                { code: "ECON 2350", name: "Statistics for Economists", credits: 4 }
+            ],
+            "Economics Electives": [
+                { code: "ECON Elective 1", name: "ECON 1200+ (4 credits)", credits: 4 },
+                { code: "ECON Elective 2", name: "ECON 1200+ (4 credits)", credits: 4 },
+                { code: "ECON Elective 3", name: "ECON 1200+ (4 credits)", credits: 4 },
+                { code: "ECON Elective 4", name: "ECON 1200+ (4 credits)", credits: 4 },
+                { code: "ECON Elective 5", name: "ECON 1200+ (4 credits)", credits: 4 }
+            ],
+            "Economics Capstone": [
+                { code: "ECON 4692", name: "Senior Economics Seminar", credits: 4 }
+            ],
+            "Integrative Course": [
+                { code: "ECON 2560", name: "Applied Econometrics", credits: 4 }
+            ],
+            "Mathematics": [
+                { code: "MATH 1231", name: "Calculus for Business and Economics", credits: 4 }
+            ],
+            "Computing & Social Issues": [
+                { code: "Social Issues", name: "Choose from approved list (4 credits)", credits: 4 }
+            ],
+            "English": [
+                { code: "ENGW 1111", name: "First-Year Writing", credits: 4 },
+                { code: "ENGW 3302", name: "Advanced Writing in Technical Professions", credits: 4 }
+            ],
+            "General Electives": [
+                { code: "Gen Elective 1", name: "General Elective (4 credits)", credits: 4 },
+                { code: "Gen Elective 2", name: "General Elective (4 credits)", credits: 4 },
+                { code: "Gen Elective 3", name: "General Elective (4 credits)", credits: 4 },
+                { code: "Gen Elective 4", name: "General Elective (4 credits)", credits: 4 },
+                { code: "Gen Elective 5", name: "General Elective (4 credits)", credits: 4 },
+                { code: "Gen Elective 6", name: "General Elective (4 credits)", credits: 4 }
+            ]
+        };
+
+        let courses = [];
+        let currentFilter = 'all';
+
+        // Initialize courses
+        function initCourses() {
+            for (const [category, coursesInCategory] of Object.entries(courseData)) {
+                coursesInCategory.forEach(course => {
+                    courses.push({
+                        ...course,
+                        category: category,
+                        status: 'not-taken'
+                    });
+                });
+            }
+            
+            // Load from localStorage if exists
+            const saved = localStorage.getItem('courseProgress');
+            if (saved) {
+                const savedCourses = JSON.parse(saved);
+                courses = courses.map(course => {
+                    const savedCourse = savedCourses.find(c => c.code === course.code);
+                    return savedCourse ? { ...course, status: savedCourse.status } : course;
+                });
+            }
+            
+            renderCourses();
+            updateStats();
+        }
+
+        function renderCourses() {
+            const container = document.getElementById('coursesContainer');
+            container.innerHTML = '';
+
+            // Group by category
+            const categories = {};
+            courses.forEach(course => {
+                if (!categories[course.category]) {
+                    categories[course.category] = [];
+                }
+                if (currentFilter === 'all' || course.status === currentFilter) {
+                    categories[course.category].push(course);
+                }
+            });
+
+            // Render each category
+            for (const [category, coursesInCategory] of Object.entries(categories)) {
+                if (coursesInCategory.length === 0) continue;
+
+                const categorySection = document.createElement('div');
+                categorySection.className = 'category-section';
+
+                const completed = coursesInCategory.filter(c => c.status === 'completed').length;
+                const total = coursesInCategory.length;
+
+                categorySection.innerHTML = `
+                    <div class="category-header" onclick="toggleCategory('${category}')">
+                        <div class="category-title">${category}</div>
+                        <div class="category-count">${completed}/${total} completed</div>
+                    </div>
+                    <div class="course-list" id="category-${category.replace(/\s+/g, '-')}">
+                        ${coursesInCategory.map(course => `
+                            <div class="course-item ${course.status}">
+                                <div class="course-info">
+                                    <div class="course-code">${course.code}</div>
+                                    <div class="course-name">${course.name}</div>
+                                </div>
+                                <div class="course-credits">${course.credits} cr</div>
+                                <div class="status-buttons">
+                                    <button class="status-btn ${course.status === 'completed' ? 'completed' : 'not-taken'}" 
+                                            onclick="setCourseStatus('${course.code}', 'completed')" 
+                                            title="Completed">
+                                        ✓
+                                    </button>
+                                    <button class="status-btn ${course.status === 'in-progress' ? 'in-progress' : 'not-taken'}" 
+                                            onclick="setCourseStatus('${course.code}', 'in-progress')"
+                                            title="In Progress">
+                                        ◐
+                                    </button>
+                                    <button class="status-btn ${course.status === 'not-taken' ? 'not-taken' : ''}" 
+                                            onclick="setCourseStatus('${course.code}', 'not-taken')"
+                                            title="Not Taken">
+                                        ○
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+
+                container.appendChild(categorySection);
+            }
+        }
+
+        function setCourseStatus(code, status) {
+            const course = courses.find(c => c.code === code);
+            if (course) {
+                course.status = status;
+                saveProgress();
+                renderCourses();
+                updateStats();
+            }
+        }
+
+        function updateStats() {
+            const completed = courses.filter(c => c.status === 'completed');
+            const inProgress = courses.filter(c => c.status === 'in-progress');
+            const remaining = courses.filter(c => c.status === 'not-taken');
+
+            const totalCreditsEarned = completed.reduce((sum, c) => sum + c.credits, 0);
+            const totalCredits = courses.reduce((sum, c) => sum + c.credits, 0);
+
+            document.getElementById('totalCredits').textContent = totalCreditsEarned;
+            document.getElementById('completedCount').textContent = completed.length;
+            document.getElementById('inProgressCount').textContent = inProgress.length;
+            document.getElementById('remainingCount').textContent = remaining.length;
+
+            const progress = Math.round((completed.length / courses.length) * 100);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = progress + '%';
+        }
+
+        function filterCourses(filter) {
+            currentFilter = filter;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            renderCourses();
+        }
+
+        function toggleCategory(category) {
+            const element = document.getElementById('category-' + category.replace(/\s+/g, '-'));
+            element.classList.toggle('hidden');
+        }
+
+        function saveProgress() {
+            const progress = courses.map(c => ({ code: c.code, status: c.status }));
+            localStorage.setItem('courseProgress', JSON.stringify(progress));
+        }
+
+        // Initialize
+        initCourses();
+    </script>
+</body>
+</html>
