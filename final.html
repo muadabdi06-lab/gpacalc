@@ -26,6 +26,35 @@
             width: 100%;
         }
 
+        .home-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #007aff;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .home-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+            background: #007aff;
+            color: white;
+        }
+
         .header {
             margin-bottom: 30px;
         }
@@ -232,6 +261,8 @@
     </style>
 </head>
 <body>
+    <a href="index.html" class="home-button">← Home</a>
+    
     <div class="container">
         <div class="header">
             <h1>Final Grade Calculator</h1>
@@ -289,7 +320,7 @@
         </div>
 
         <div class="footer">
-            Created by Muad Abdi
+            Created by Muad
         </div>
     </div>
 
